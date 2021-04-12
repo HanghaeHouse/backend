@@ -46,6 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/**", "/api/signup", "/api/login", "/api/logincheck").permitAll()
                 .anyRequest().authenticated() // 그외 나머지 로그인 필요
                 .and()
+                .formLogin()
                 .loginPage("/login")
                 .permitAll()
                 .and()
