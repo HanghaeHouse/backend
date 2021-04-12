@@ -1,4 +1,4 @@
-package hanghaehouse.hanghaehouse.domain;
+package hanghaehouse.hanghaehouse.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -53,7 +53,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return userName;
     }
 
     @Override

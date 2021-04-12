@@ -1,7 +1,7 @@
 package hanghaehouse.hanghaehouse.Controller;
 
-import hanghaehouse.hanghaehouse.domain.User;
-import hanghaehouse.hanghaehouse.domain.UserRepository;
+import hanghaehouse.hanghaehouse.domain.model.User;
+import hanghaehouse.hanghaehouse.domain.repository.UserRepository;
 import hanghaehouse.hanghaehouse.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,7 +42,8 @@ public class UserController {
         if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
-        return jwtTokenProvider.createToken(member.getUsername());
+        //return jwtTokenProvider.createToken(member.getUsername());
+        return jwtTokenProvider.createToken(member.getEmail());
     }
 
     //Request의 Header로 넘어온 token을 쪼개어 유저정보 확인해주는 과정 _ return value: Optional<User>

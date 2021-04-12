@@ -1,5 +1,6 @@
-package hanghaehouse.hanghaehouse.domain;
+package hanghaehouse.hanghaehouse.domain.repository;
 
+import hanghaehouse.hanghaehouse.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
