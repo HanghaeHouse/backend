@@ -19,7 +19,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 @Entity
-public class User implements UserDetails{
+
+public class User implements UserDetails {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +41,7 @@ public class User implements UserDetails{
 
     @ElementCollection
     private List<String> userInterested; // 빈 배열
+
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
