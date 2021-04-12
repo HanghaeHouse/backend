@@ -35,10 +35,22 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    // JWT 토큰 생성
-    public String createToken(String userPk, List<String> roles) {
+//    // JWT 토큰 생성 ( 토큰에 롤 추가 형태)
+//    public String createToken(String userPk, List<String> roles) {
+//        Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위
+//        claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
+//        Date now = new Date();
+//        return Jwts.builder()
+//                .setClaims(claims) // 정보 저장
+//                .setIssuedAt(now) // 토큰 발행 시간 정보
+//                .setExpiration(new Date(now.getTime() + tokenValidTime)) // set Expire Time
+//                .signWith(SignatureAlgorithm.HS256, secretKey)  // 사용할 암호화 알고리즘과
+//                // signature 에 들어갈 secret값 세팅
+//                .compact();
+//    }
+
+    public String createToken(String userPk) {
         Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위
-        claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장
@@ -62,7 +74,7 @@ public class JwtTokenProvider {
 
     // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH-TOKEN");
+        return request.getHeader("Token");
     }
 
     // 토큰의 유효성 + 만료일자 확인

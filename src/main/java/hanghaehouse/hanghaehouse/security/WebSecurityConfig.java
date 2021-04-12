@@ -42,8 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() // 요청에 대한 사용권한 체크
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasRole("USER")
-                .antMatchers("/h2-console/**").permitAll()
-                .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
+                .antMatchers("/h2-console/**", "/api/signup", "/api/login").permitAll()
+                .anyRequest().authenticated() // 그외 나머지 로그인 필요
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);

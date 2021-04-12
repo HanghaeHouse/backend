@@ -1,4 +1,4 @@
-package hanghaehouse.hanghaehouse.domain;
+package hanghaehouse.hanghaehouse.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,21 +25,20 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 300, nullable = false, unique = true)
     private String email;
+
+    @Column(length = 100, nullable = false)
+    private String userName;
 
     @Column(length = 300, nullable = false)
     private String password;
 
-    @Column(length = 100, nullable = false, unique = true)
-    private String userName;
+    @Column
+    private String userInterested; // 빈 배열
 
-    @Column(length = 100, unique = true)
-    private String userInterested;
-
-    //이미지
-    @Column(length = 100, unique = true)
-    private String userProfile;
+    @Column
+    private String userProfile; // 이미지
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
@@ -54,7 +53,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return userName;
     }
 
     @Override
