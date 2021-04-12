@@ -7,10 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -41,4 +44,16 @@ public class UserController {
         }
         return jwtTokenProvider.createToken(member.getUsername());
     }
+
+    //Request의 Header로 넘어온 token을 쪼개어 유저정보 확인해주는 과정 _ return value: Optional<User>
+    @RequestMapping("/api/logincheck")
+    public Optional<User> userInfo(HttpServletRequest httpServletRequest) {
+    /*
+    HTTP Request의 Header로 넘어온 token을 쪼개어 누구인지 나타내주는 과정
+     */
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        String email = jwtTokenProvider.getUserPk(token);
+        return userRepository.findByEmail(email);
+    }
+
 }
