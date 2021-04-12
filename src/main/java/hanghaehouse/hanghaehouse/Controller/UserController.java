@@ -24,7 +24,8 @@ public class UserController {
     @PostMapping("/api/signup")
     public Long signup(@RequestBody Map<String, String> user) {
         return userRepository.save(User.builder()
-                .username(user.get("username"))
+                .email(user.get("email"))
+                .userName(user.get("userName"))
                 .password(passwordEncoder.encode(user.get("password")))
                 .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
                 .build()).getId();
@@ -33,7 +34,7 @@ public class UserController {
     // 로그인
     @PostMapping("/api/login")
     public String login(@RequestBody Map<String, String> user) {
-        User member = userRepository.findByUsername(user.get("username"))
+        User member = userRepository.findByEmail(user.get("email"))
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 회원 이름 입니다."));
         if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");

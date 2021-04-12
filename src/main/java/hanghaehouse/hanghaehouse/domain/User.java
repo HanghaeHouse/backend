@@ -26,16 +26,19 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(length = 100, nullable = false, unique = true)
-    private String username;
+    private String email;
+
+    @Column(length = 100, nullable = false)
+    private String userName;
 
     @Column(length = 300, nullable = false)
     private String password;
 
     @Column
-    private String user_interested; // 빈 배열
+    private String userInterested; // 빈 배열
 
     @Column
-    private String user_profile; // 이미지
+    private String userProfile; // 이미지
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
@@ -50,7 +53,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
