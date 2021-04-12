@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 @Entity
-public class User implements UserDetails {
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +35,10 @@ public class User implements UserDetails {
     private String password;
 
     @Column
-    private String userInterested; // 빈 배열
-
-    @Column
     private String userProfile; // 이미지
+
+    @ElementCollection
+    private List<String> userInterested; // 빈 배열
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
@@ -75,4 +75,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
