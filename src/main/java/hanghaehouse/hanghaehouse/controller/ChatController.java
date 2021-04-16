@@ -1,8 +1,8 @@
 package hanghaehouse.hanghaehouse.controller;
 
 import hanghaehouse.hanghaehouse.domain.model.ChatMessage;
-import hanghaehouse.hanghaehouse.domain.repository.ChatRoomRepository;
 import hanghaehouse.hanghaehouse.security.JwtTokenProvider;
+import hanghaehouse.hanghaehouse.service.ChatRoomService;
 import hanghaehouse.hanghaehouse.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 public class ChatController {//ChatService에서 입/퇴장을 처리하기 때문에 간소
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomService chatRoomService;
     private final ChatService chatService;
 
     /**
@@ -28,7 +28,7 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
         // 헤더에서 토큰을 읽어 로그인 회원 정보로 대화명 설정
         message.setSender(nickname);
         // 채팅방 인원수 세팅
-        message.setUserCount(chatRoomRepository.getUserCount(message.getRoomId()));
+        message.setUserCount(chatRoomService.getUserCount(message.getRoomId()));
         // Websocket에 발행된 메시지를 redis로 발행(publish)
         chatService.sendChatMessage(message); // 메서드 일원화
     }

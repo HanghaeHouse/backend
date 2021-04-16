@@ -2,8 +2,8 @@ package hanghaehouse.hanghaehouse.controller;
 
 import hanghaehouse.hanghaehouse.domain.model.ChatRoom;
 import hanghaehouse.hanghaehouse.domain.model.LoginInfo;
-import hanghaehouse.hanghaehouse.domain.repository.ChatRoomRepository;
 import hanghaehouse.hanghaehouse.security.JwtTokenProvider;
+import hanghaehouse.hanghaehouse.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/chat")
 public class ChatRoomController {
 
-    private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomService chatRoomService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/room")
@@ -29,15 +29,15 @@ public class ChatRoomController {
     @GetMapping("/rooms")//채팅방 리스트 조회
     @ResponseBody
     public List<ChatRoom> room() {
-        List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
-        chatRooms.stream().forEach(room -> room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId())));
+        List<ChatRoom> chatRooms = chatRoomService.findAllRoom();
+        chatRooms.stream().forEach(room -> room.setUserCount(chatRoomService.getUserCount(room.getRoomId())));
         return chatRooms;
     }
 
     @PostMapping("/room")
     @ResponseBody
     public ChatRoom createRoom(@RequestParam String name) {
-        return chatRoomRepository.createChatRoom(name);
+        return chatRoomService.createChatRoom(name);
     }
 
     @GetMapping("/room/enter/{roomId}")
@@ -49,7 +49,7 @@ public class ChatRoomController {
     @GetMapping("/room/{roomId}")
     @ResponseBody
     public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatRoomRepository.findRoomById(roomId);
+        return chatRoomService.findRoomById(roomId);
     }
 
     @GetMapping("/user") // 로그인한 회원의 id 및 jwt 토큰 정보를 조회할 수 있도록 추가
