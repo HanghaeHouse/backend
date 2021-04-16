@@ -1,11 +1,9 @@
 package hanghaehouse.hanghaehouse.security;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +16,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
@@ -60,18 +59,45 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
+
+
     // Request의 Header에서 token 값을 가져옵니다.
     public String resolveToken(HttpServletRequest request) {
         return request.getHeader("Token");
     }
 
-    // 토큰의 유효성 + 만료일자 확인
+//    // 토큰의 유효성 + 만료일자 확인
+//    public boolean validateToken(String jwtToken) {
+//        try {
+//            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+//            return !claims.getBody().getExpiration().before(new Date());
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
+
     public boolean validateToken(String jwtToken) {
+        return this.getClaims(jwtToken) != null;
+    }
+
+    private Jws<Claims> getClaims(String jwtToken) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-            return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
-            return false;
+            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+        } catch (SignatureException ex) {
+            log.error("Invalid JWT signature");
+            throw ex;
+        } catch (MalformedJwtException ex) {
+            log.error("Invalid JWT token");
+            throw ex;
+        } catch (ExpiredJwtException ex) {
+            log.error("Expired JWT token");
+            throw ex;
+        } catch (UnsupportedJwtException ex) {
+            log.error("Unsupported JWT token");
+            throw ex;
+        } catch (IllegalArgumentException ex) {
+            log.error("JWT claims string is empty.");
+            throw ex;
         }
     }
 }
