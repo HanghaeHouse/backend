@@ -1,5 +1,6 @@
 package hanghaehouse.hanghaehouse.domain.model;
 
+import hanghaehouse.hanghaehouse.domain.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -77,6 +78,16 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    //프로필 업데이트
+    public void update(UserDto userDto){
+           this.id = userDto.getId();
+           this.email = userDto.getEmail();
+           this.userName = userDto.getUserName();
+           this.userProfile = userDto.getUserProfile();
+           this.userInterested = userDto.getUserInterested();
+           this.roles = userDto.getRoles();
     }
 
 }
