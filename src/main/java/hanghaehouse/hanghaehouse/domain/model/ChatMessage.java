@@ -3,7 +3,9 @@ package hanghaehouse.hanghaehouse.domain.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.redis.core.RedisHash;
 
+@RedisHash
 @Getter
 @Setter
 public class ChatMessage {

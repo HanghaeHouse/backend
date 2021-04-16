@@ -15,7 +15,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/chat")
+@RequestMapping("/api/chat")
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
@@ -36,8 +36,8 @@ public class ChatRoomController {
 
     @PostMapping("/room")
     @ResponseBody
-    public ChatRoom createRoom(@RequestParam String name) {
-        return chatRoomService.createChatRoom(name);
+    public ChatRoom createRoom(@RequestBody String roomName) {
+        return chatRoomService.createChatRoom(roomName);
     }
 
     @GetMapping("/room/enter/{roomId}")
