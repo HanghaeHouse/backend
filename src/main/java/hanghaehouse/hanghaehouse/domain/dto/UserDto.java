@@ -40,8 +40,12 @@ public class UserDto {
     public UserDto(User user, JSONObject userJson) {
         this.id =user.getId();
         this.email = user.getEmail();
+        if(userJson.isNull("userProfile")){
+            this.userProfile = null;
+        } else {
+            this.userProfile = userJson.getString("userProfile");
+        }
         this.userName = userJson.getString("userName");
-        this.userProfile = userJson.getString("userProfile");
         if(userJson.isNull("userInterested")){
             this.userInterested = new ArrayList<>();
         } else {

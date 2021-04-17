@@ -2,6 +2,8 @@ package hanghaehouse.hanghaehouse.config.handler;
 
 import hanghaehouse.hanghaehouse.domain.model.ChatMessage;
 
+import hanghaehouse.hanghaehouse.domain.model.User;
+import hanghaehouse.hanghaehouse.domain.repository.UserRepository;
 import hanghaehouse.hanghaehouse.security.JwtTokenProvider;
 import hanghaehouse.hanghaehouse.service.ChatRoomService;
 import hanghaehouse.hanghaehouse.service.ChatService;
@@ -12,6 +14,8 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.security.Principal;
@@ -25,6 +29,7 @@ public class StompHandler implements ChannelInterceptor {
     private final JwtTokenProvider jwtTokenProvider;
     private final ChatRoomService chatRoomService;
     private final ChatService chatService;
+    private final UserRepository userRepository;
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
     @Override
@@ -49,29 +54,31 @@ public class StompHandler implements ChannelInterceptor {
             System.out.println("해당 룸 ID:" +roomId);
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             System.out.println("요청한 session ID :"+ sessionId);
-            System.out.println("입장 요청");
+            System.out.println("입장 요청, 유저정보 셋팅 요청");
             chatRoomService.setUserEnterInfo(sessionId, roomId);
             // 채팅방의 인원수를 +1한다.
             System.out.println("인원수 +1");
             chatRoomService.plusUserCount(roomId);
             System.out.println("입장 메세지 발송 요청 진입");
-            // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
             String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
-            System.out.println("요청한 유저 닉네임:"+name);
+
             System.out.println("발송 요청");
-            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).userName(name).build());
             log.info("SUBSCRIBED {}, {}", name, roomId);
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) { // Websocket 연결 종료
+            System.out.println("연결 종료 단계");
             // 연결이 종료된 클라이언트 sesssionId로 채팅방 id를 얻는다.
             String sessionId = (String) message.getHeaders().get("simpSessionId");
+            System.out.println("연결이 종료된 세션 : "+sessionId);
             String roomId = chatRoomService.getUserEnterRoomId(sessionId);
+            System.out.println("룸 아이디 확인 : "+ roomId);
             // 채팅방의 인원수를 -1한다.
+            System.out.println("인원수 -1 ");
             chatRoomService.minusUserCount(roomId);
             // 클라이언트 퇴장 메시지를 채팅방에 발송한다.(redis publish)
-            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
-            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).userName(name).build());
+
             // 퇴장한 클라이언트의 roomId 맵핑 정보를 삭제한다.
             chatRoomService.removeUserEnterInfo(sessionId);
+            System.out.println("맵핑 정보 삭제");
             log.info("DISCONNECTED {}, {}", sessionId, roomId);
         }
         return message;
