@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+//@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/api/chat")
@@ -49,7 +50,7 @@ public class ChatRoomController {
     @GetMapping("/room/enter/{roomId}")
     public String roomDetail(Model model, @PathVariable String roomId) {
         model.addAttribute("roomId", roomId);
-        return "/chat/roomdetail"; //resources에 있는 roomdetail.ftl파일을 뷰 리졸버가 찾아서 연결해줌. 프론트 백 통신할떄는 빌드파일에 없어서 될지..
+        return "chat/roomdetail"; //resources에 있는 roomdetail.ftl파일을 뷰 리졸버가 찾아서 연결해줌. 프론트 백 통신할떄는 빌드파일에 없어서 될지..
     }
 
     @GetMapping("/room/{roomId}")

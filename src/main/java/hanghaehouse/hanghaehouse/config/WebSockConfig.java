@@ -24,7 +24,7 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-stomp").setAllowedOriginPatterns("*://*")//endpoint, 개발 서버 접속 주소 : ws://localhost:8080/ws-stomp
+        registry.addEndpoint("/ws-stomp").setAllowedOriginPatterns("*://*")//endpoint, 개발 서버 접속 주소 : 토큰을 가지고 http://localhost:8080/ws-stomp로 접속하면 Handshake 일어나면서 HTTP->WS 프로토콜 변결. "Welcome to SockJS!"가 출력됨
                 .withSockJS(); // sock.js를 통하여 낮은 버전의 브라우저에서도 websocket이 동작할수 있게 합니다.
     }
 

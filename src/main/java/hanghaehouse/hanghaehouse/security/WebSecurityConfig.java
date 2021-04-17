@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -38,8 +39,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin();
 
         http
+                .cors() //Spring Security에 앞서 CORS가 먼저 수행되도록 설정
+                .and()
                 .csrf().disable() // csrf 보안 토큰 disable처리.
                 .authorizeRequests() // 요청에 대한 사용권한 체크
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // preflight 요청에 대해 401응답을 내려주지 않도록 함
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasRole("USER")
                 .antMatchers("/h2-console/**", "/api/signup", "/api/login", "/api/logincheck").permitAll()

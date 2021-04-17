@@ -19,8 +19,7 @@ public class UserDto {
     private String userProfile; // 이미지
     private List<String> userInterested; // 빈 배열
     private String token;
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    private List<String> roles;
 
     public UserDto(String token, User user){
         this.id =user.getId();
