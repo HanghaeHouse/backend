@@ -32,13 +32,13 @@ public class ChatService { //입장, 퇴장 처리
         chatMessage.setUserCount(chatRoomService.getUserCount(chatMessage.getRoomId()));
         if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
             System.out.println(chatMessage);
-            chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
-            chatMessage.setSender("[알림]");
+            chatMessage.setMessage(chatMessage.getUserName() + "님이 방에 입장했습니다.");
+            chatMessage.setUserName("[알림]");
             System.out.println(chatMessage);
         } else if (ChatMessage.MessageType.QUIT.equals(chatMessage.getType())) {
             System.out.println(chatMessage);
-            chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
-            chatMessage.setSender("[알림]");
+            chatMessage.setMessage(chatMessage.getUserName() + "님이 방에서 나갔습니다.");
+            chatMessage.setUserName("[알림]");
             System.out.println(chatMessage);
         }
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);

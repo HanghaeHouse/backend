@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -26,7 +27,8 @@ public class ChatRoomController {
         return "/chat/room";
     }
 
-    @GetMapping("/rooms")//채팅방 리스트 조회
+    //채팅방 리스트 조회
+    @GetMapping("/rooms")
     @ResponseBody
     public List<ChatRoom> room() {
         List<ChatRoom> chatRooms = chatRoomService.findAllRoom();
@@ -34,16 +36,20 @@ public class ChatRoomController {
         return chatRooms;
     }
 
+    //채팅방 생성(parameter : roomName, userInterested)
     @PostMapping("/room")
     @ResponseBody
-    public ChatRoom createRoom(@RequestBody String roomName) {
-        return chatRoomService.createChatRoom(roomName);
+    public ChatRoom createRoom(@RequestBody Map<String, String> chatRoom) {
+        String roomName = chatRoom.get("roomName");
+        String userInterested = chatRoom.get("userInterested");
+        return chatRoomService.createChatRoom(roomName, userInterested);
     }
 
+    //특정 채팅방 입장
     @GetMapping("/room/enter/{roomId}")
     public String roomDetail(Model model, @PathVariable String roomId) {
         model.addAttribute("roomId", roomId);
-        return "/chat/roomdetail";
+        return "/chat/roomdetail"; //resources에 있는 roomdetail.ftl파일을 뷰 리졸버가 찾아서 연결해줌. 프론트 백 통신할떄는 빌드파일에 없어서 될지..
     }
 
     @GetMapping("/room/{roomId}")
@@ -52,7 +58,8 @@ public class ChatRoomController {
         return chatRoomService.findRoomById(roomId);
     }
 
-    @GetMapping("/user") // 로그인한 회원의 id 및 jwt 토큰 정보를 조회할 수 있도록 추가
+    // 로그인한 회원의 id 및 jwt 토큰 정보를 조회할 수 있도록 추가
+    @GetMapping("/user")
     @ResponseBody
     public LoginInfo getUserInfo() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

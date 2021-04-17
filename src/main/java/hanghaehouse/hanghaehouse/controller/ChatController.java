@@ -27,7 +27,7 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
     public void message(@RequestBody ChatMessage message, @Header("token") String token) {
         String nickname = jwtTokenProvider.getUserPk(token); //회원의 대화명을 가져와 token 유효성 체크
         // 헤더에서 토큰을 읽어 로그인 회원 정보로 대화명 설정
-        message.setSender(nickname);
+        message.setUserName(nickname);
         // 채팅방 인원수 세팅
         message.setUserCount(chatRoomService.getUserCount(message.getRoomId()));
         // Websocket에 발행된 메시지를 redis로 발행(publish)

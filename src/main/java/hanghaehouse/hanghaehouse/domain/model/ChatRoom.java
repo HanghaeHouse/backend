@@ -13,13 +13,15 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
     private static final long serialVersionUID = 6494678977089006639L;
 
     private String roomId;
-    private String name;
+    private String roomName;
+    private String userInterested;
     private long userCount; // 채팅방 인원수
 
-    public static ChatRoom create(String name) {
+    public static ChatRoom create(String name, String userInterested) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.name = name;
+        chatRoom.roomName = name;
+        chatRoom.userInterested = userInterested;
         return chatRoom;
     }
 }
