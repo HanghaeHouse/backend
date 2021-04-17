@@ -43,7 +43,6 @@ public class User implements UserDetails {
     @ElementCollection
     private List<String> userInterested; // 빈 배열
 
-
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();

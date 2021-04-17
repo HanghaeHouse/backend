@@ -1,36 +1,25 @@
 package hanghaehouse.hanghaehouse.controller;
-
-
 import hanghaehouse.hanghaehouse.domain.dto.UserDto;
 import hanghaehouse.hanghaehouse.domain.model.User;
 import hanghaehouse.hanghaehouse.domain.repository.UserRepository;
 import hanghaehouse.hanghaehouse.security.JwtTokenProvider;
 import hanghaehouse.hanghaehouse.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.json.JSONObject;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-//@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 public class UserController {
-
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final UserService userService;
-
     // 회원가입
     @PostMapping("/api/signup")
     public Long join(@RequestBody Map<String, String> user) {
@@ -41,7 +30,6 @@ public class UserController {
                 .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
                 .build()).getId();
     }
-
     @PostMapping("/api/login")
     public UserDto login(@RequestBody Map<String, String> user) {
         User member = userRepository.findByEmail(user.get("email"))
@@ -53,9 +41,6 @@ public class UserController {
         UserDto User = new UserDto(token,member);
         return User;
     }
-
-
-
     //Request의 Header로 넘어온 token을 쪼개어 유저정보 확인해주는 과정 _ return value: Optional<User>
     @RequestMapping("/api/logincheck")
     public UserDto userInfo(HttpServletRequest httpServletRequest) {
@@ -86,9 +71,9 @@ public class UserController {
 
     //프로필 수정
     @RequestMapping("/api/profile")
-    public UserDto profileChange(@RequestBody String userJson, HttpServletRequest httpServletRequest) throws JSONException {
+    public UserDto profileChange(@RequestBody String userJson, HttpServletRequest httpServletRequest) {
         //토근에서 사용자 정보 추출
-        JSONObject ujson = new JSONObject(userJson);
+        JSONObject ujson = new org.json.JSONObject(userJson);
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User member = userRepository.findByEmail(email)
@@ -99,4 +84,13 @@ public class UserController {
         return User;
     }
 
+    @RequestMapping("/api/userprofile")
+    public UserDto getProfile(HttpServletRequest httpServletRequest){
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        String email = jwtTokenProvider.getUserPk(token);
+        User member = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
+        UserDto User = new UserDto(token,member);
+        return User;
+    }
 }
