@@ -37,7 +37,7 @@ public class User implements UserDetails {
     @Column(length = 300, nullable = false)
     private String password;
 
-    @Column
+    @Column(length = 300)
     private String userProfile; // 이미지
 
     @ElementCollection
