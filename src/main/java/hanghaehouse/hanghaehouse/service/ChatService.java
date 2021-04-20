@@ -6,6 +6,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 @RequiredArgsConstructor
 @Service
 public class ChatService { //입장, 퇴장 처리
@@ -30,6 +33,10 @@ public class ChatService { //입장, 퇴장 처리
      */
     public void sendChatMessage(ChatMessage chatMessage) {
         System.out.println("메세지 발송 단계 진입");
+        long systemTime = System.currentTimeMillis();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
+        String dTime = formatter.format(systemTime);
+        chatMessage.setTimenow(dTime);
         chatMessage.setUserCount(chatRoomService.getUserCount(chatMessage.getRoomId()));
         System.out.println("보낼 유저 수 셋 완료");
         if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
