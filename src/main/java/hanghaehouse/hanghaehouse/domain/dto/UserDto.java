@@ -1,6 +1,5 @@
 package hanghaehouse.hanghaehouse.domain.dto;
 import hanghaehouse.hanghaehouse.domain.model.User;
-import lombok.Builder;
 import lombok.Getter;
 import org.json.JSONArray;
 //import org.springframework.boot.configurationprocessor.json.JSONArray;

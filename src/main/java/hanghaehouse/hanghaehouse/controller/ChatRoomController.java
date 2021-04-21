@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 //@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
@@ -54,21 +53,10 @@ public class ChatRoomController {
     @PostMapping("/room")
     @ResponseBody
     public ChatRoom createRoom(@RequestBody ChatRoomDto chatRoomDto) {
-//        String roomName = chatRoom.get("roomName");
-//        String userInterested = chatRoom.get("userInterested");
         ChatRoom createdRoom = chatRoomService.createChatRoom(chatRoomDto);
         chatRoomRepository.save(createdRoom);
         return createdRoom;
     }
-//    @PostMapping("/room")
-//    @ResponseBody
-//    public ChatRoom createRoom(@RequestBody Map<String, String> chatRoom) {
-//        String roomName = chatRoom.get("roomName");
-//        String userInterested = chatRoom.get("userInterested");
-//        ChatRoom createdRoom = chatRoomService.createChatRoom(roomName, userInterested);
-//        chatRoomRepository.save(createdRoom);
-//        return createdRoom;
-//    }
 
     //특정 채팅방 입장
     @GetMapping("/room/enter/{roomId}")

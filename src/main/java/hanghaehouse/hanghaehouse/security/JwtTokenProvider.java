@@ -65,16 +65,6 @@ public class JwtTokenProvider {
         return request.getHeader("Token");
     }
 
-//    // 토큰의 유효성 + 만료일자 확인
-//    public boolean validateToken(String jwtToken) {
-//        try {
-//            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-//            return !claims.getBody().getExpiration().before(new Date());
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
-
     public boolean validateToken(String jwtToken) {
         return this.getClaims(jwtToken) != null;
     }

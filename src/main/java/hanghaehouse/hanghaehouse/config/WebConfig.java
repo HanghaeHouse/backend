@@ -25,10 +25,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("/webjars/");
     }
 
-
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registry) { // 여기서 view url을 mapping 해줄수 있음
-//        registry.addViewController("/home").setViewName("home"); // 앞 url : 요청, 뒤 text :url이름
-//        registry.addViewController("/").setViewName("home");
-//    }
 }

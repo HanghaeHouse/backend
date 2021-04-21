@@ -43,11 +43,6 @@ public class ChatRoomService {
         hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
         return chatRoom;
     }
-//    public ChatRoom createChatRoom(String name, String userInterested) {
-//        ChatRoom chatRoom = ChatRoom.create(name, userInterested);
-//        hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
-//        return chatRoom;
-//    }
 
     // 유저가 입장한 채팅방ID와 유저 세션ID 맵핑 정보 저장
     public void setUserEnterInfo(String sessionId, String roomId) {
