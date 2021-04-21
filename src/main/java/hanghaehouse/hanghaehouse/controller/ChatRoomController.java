@@ -39,6 +39,16 @@ public class ChatRoomController {
         return chatRooms;
     }
 
+    //관심사별 채팅방 리스트 조회
+    //ChatRoomService에 접근해서 목록을 받아오면 HashOps 관련된 부분을 써야하기때문에 우선 Repository로 접근
+    @GetMapping("/rooms/{interest}")
+    @ResponseBody
+    public List<ChatRoom> interestRoom(@PathVariable String interest) {
+        List<ChatRoom> interestChatRooms = chatRoomRepository.findAllByUserInterested(interest);
+        interestChatRooms.stream().forEach(room -> room.setUserCount(chatRoomService.getUserCount(room.getRoomId())));
+        return interestChatRooms;
+    }
+
     //채팅방 생성(parameter : roomName, userInterested)
     @PostMapping("/room")
     @ResponseBody

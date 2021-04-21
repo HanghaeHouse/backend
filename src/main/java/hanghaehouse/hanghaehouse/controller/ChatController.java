@@ -13,7 +13,13 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.List;
 
 //@CrossOrigin(origins = "*")
 @Slf4j
@@ -30,6 +36,12 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
+    @GetMapping("/api/chat/message/{roomId}")
+    public List<ChatMessage> loadMessage(@PathVariable String roomId) {
+        List<ChatMessage> messages = chatMessageRepository.findAllByRoomIdOrderByTimenowDesc(roomId);
+        return messages;
+    }
+
     @MessageMapping("/api/chat/message") // 웹소켓으로 들어오는 메시지 발행 처리 -> 클라이언트에서는 /pub/chat/message로 발행 요청
     public void message(@RequestBody ChatMessage message, @Header("token") String token) {
         System.out.println("pub으로 들어온 메세지 확인");
