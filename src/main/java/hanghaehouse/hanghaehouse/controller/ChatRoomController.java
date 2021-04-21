@@ -1,5 +1,6 @@
 package hanghaehouse.hanghaehouse.controller;
 
+import hanghaehouse.hanghaehouse.domain.dto.ChatRoomDto;
 import hanghaehouse.hanghaehouse.domain.model.ChatRoom;
 import hanghaehouse.hanghaehouse.domain.model.LoginInfo;
 import hanghaehouse.hanghaehouse.domain.repository.ChatRoomRepository;
@@ -52,13 +53,22 @@ public class ChatRoomController {
     //채팅방 생성(parameter : roomName, userInterested)
     @PostMapping("/room")
     @ResponseBody
-    public ChatRoom createRoom(@RequestBody Map<String, String> chatRoom) {
-        String roomName = chatRoom.get("roomName");
-        String userInterested = chatRoom.get("userInterested");
-        ChatRoom createdRoom = chatRoomService.createChatRoom(roomName, userInterested);
+    public ChatRoom createRoom(@RequestBody ChatRoomDto chatRoomDto) {
+//        String roomName = chatRoom.get("roomName");
+//        String userInterested = chatRoom.get("userInterested");
+        ChatRoom createdRoom = chatRoomService.createChatRoom(chatRoomDto);
         chatRoomRepository.save(createdRoom);
         return createdRoom;
     }
+//    @PostMapping("/room")
+//    @ResponseBody
+//    public ChatRoom createRoom(@RequestBody Map<String, String> chatRoom) {
+//        String roomName = chatRoom.get("roomName");
+//        String userInterested = chatRoom.get("userInterested");
+//        ChatRoom createdRoom = chatRoomService.createChatRoom(roomName, userInterested);
+//        chatRoomRepository.save(createdRoom);
+//        return createdRoom;
+//    }
 
     //특정 채팅방 입장
     @GetMapping("/room/enter/{roomId}")

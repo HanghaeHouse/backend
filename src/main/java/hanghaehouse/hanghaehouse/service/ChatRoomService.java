@@ -1,5 +1,6 @@
 package hanghaehouse.hanghaehouse.service;
 
+import hanghaehouse.hanghaehouse.domain.dto.ChatRoomDto;
 import hanghaehouse.hanghaehouse.domain.model.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
@@ -36,11 +37,17 @@ public class ChatRoomService {
     }
 
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다. -> 이것으로 채팅방은 지워지지 않음
-    public ChatRoom createChatRoom(String name, String userInterested) {
-        ChatRoom chatRoom = ChatRoom.create(name, userInterested);
+    // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다. -> 이것으로 채팅방은 지워지지 않음
+    public ChatRoom createChatRoom(ChatRoomDto chatRoomDto) {
+        ChatRoom chatRoom = ChatRoom.create(chatRoomDto);
         hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
         return chatRoom;
     }
+//    public ChatRoom createChatRoom(String name, String userInterested) {
+//        ChatRoom chatRoom = ChatRoom.create(name, userInterested);
+//        hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+//        return chatRoom;
+//    }
 
     // 유저가 입장한 채팅방ID와 유저 세션ID 맵핑 정보 저장
     public void setUserEnterInfo(String sessionId, String roomId) {
