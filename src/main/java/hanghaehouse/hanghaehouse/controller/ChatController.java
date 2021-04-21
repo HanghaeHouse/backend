@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -37,6 +34,7 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @GetMapping("/api/chat/message/{roomId}")
+    @ResponseBody
     public List<ChatMessage> loadMessage(@PathVariable String roomId) {
         List<ChatMessage> messages = chatMessageRepository.findAllByRoomIdOrderByTimenowDesc(roomId);
         return messages;
