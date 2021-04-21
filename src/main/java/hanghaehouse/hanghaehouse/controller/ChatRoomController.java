@@ -2,6 +2,7 @@ package hanghaehouse.hanghaehouse.controller;
 
 import hanghaehouse.hanghaehouse.domain.model.ChatRoom;
 import hanghaehouse.hanghaehouse.domain.model.LoginInfo;
+import hanghaehouse.hanghaehouse.domain.repository.ChatRoomRepository;
 import hanghaehouse.hanghaehouse.security.JwtTokenProvider;
 import hanghaehouse.hanghaehouse.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ChatRoomRepository chatRoomRepository;
 
     @GetMapping("/room")
     public String rooms() {
@@ -43,7 +45,9 @@ public class ChatRoomController {
     public ChatRoom createRoom(@RequestBody Map<String, String> chatRoom) {
         String roomName = chatRoom.get("roomName");
         String userInterested = chatRoom.get("userInterested");
-        return chatRoomService.createChatRoom(roomName, userInterested);
+        ChatRoom createdRoom = chatRoomService.createChatRoom(roomName, userInterested);
+        chatRoomRepository.save(createdRoom);
+        return createdRoom;
     }
 
     //특정 채팅방 입장

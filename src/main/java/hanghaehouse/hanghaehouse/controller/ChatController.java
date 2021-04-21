@@ -2,6 +2,7 @@ package hanghaehouse.hanghaehouse.controller;
 
 import hanghaehouse.hanghaehouse.domain.model.ChatMessage;
 import hanghaehouse.hanghaehouse.domain.model.User;
+import hanghaehouse.hanghaehouse.domain.repository.ChatMessageRepository;
 import hanghaehouse.hanghaehouse.domain.repository.UserRepository;
 import hanghaehouse.hanghaehouse.security.JwtTokenProvider;
 import hanghaehouse.hanghaehouse.service.ChatRoomService;
@@ -24,6 +25,7 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
     private final ChatRoomService chatRoomService;
     private final ChatService chatService;
     private final UserRepository userRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
@@ -48,6 +50,7 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
 
         // Websocket에 발행된 메시지를 redis로 발행(publish)
         chatService.sendChatMessage(message); // 메서드 일원화
+        chatMessageRepository.save(message);
         System.out.println("메세지 송부 요청 완료");
     }
 }
