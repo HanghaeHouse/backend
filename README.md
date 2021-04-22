@@ -20,11 +20,17 @@
 
 ## **🔧  백엔드 구현기능 및 협업 툴(Front-end)**
 
-서버(Amazon EC2)
-
-파일저장소(Amazon S3)
-
-DB(Amazon RDS)
+- ubuntu18.04 - t2.micro(AWS EC2)
+- Storage Service(AWS S3)
+- MySQL 8.0.20(AWS RDS)
+- Redis server 4.0.9
+- Framework : SpringBoot 2.4
+- Java: JDK 1.8.0
+- IDE: IntelliJ IDEA 2020.3.3 x64
+- Build Management: Gradle
+- ORM: Spring Data JPA
+- View Template Engine: React.js(프론트엔드)
+- Sub-Framework: Spring Security, SpringBoot Websocket
 
 ### **[메인 페이지(채팅방)]**
 
